@@ -124,17 +124,10 @@ function updateProgressBarUI() {
     }
 }
 
-let navDelayTimer = null;
 function resetNavVisibility() {
-    clearTimeout(navDelayTimer);
-    btnPrev.classList.add('nav-hidden');
-    btnNext.classList.add('nav-hidden');
-
-    // 10秒後にフワッと表示の許可を与える（transitionは既存のCSSで0.8sかかっている）
-    navDelayTimer = setTimeout(() => {
-        btnPrev.classList.remove('nav-hidden');
-        btnNext.classList.remove('nav-hidden');
-    }, 10000);
+    // 常時表示のため、非表示クラスを付与しない
+    btnPrev.classList.remove('nav-hidden');
+    btnNext.classList.remove('nav-hidden');
 }
 
 function restartProgressAnimation() {
