@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stilled Words</title>
+    <meta name="description" content="AI生成によるデジタル・アフォリズム帳 - Stilled Words">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="aphorism-container">
+        <!-- 初期状態から不透明度0で隠しておき、JSロード後にフェードインさせる -->
+        <div id="content-area">
+            <p id="fortune-text"></p>
+            <p id="aphorism-text"></p>
+            <p id="lucky-item-text"></p>
+        </div>
+    </div>
+
+    <!-- 儀式的な操作を司るUI群 -->
+    <div id="nav-btn-prev" class="ui-element nav-left">&lt;</div>
+    <div id="nav-btn-next" class="ui-element nav-right">&gt;</div>
+    <div id="action-pause" class="ui-element pause-btn">||</div>
+
+    <div id="share-container" class="ui-element share-wrapper">
+        <span id="share-toggle">シェア</span>
+    </div>
+
+    <div id="progress-bar"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>

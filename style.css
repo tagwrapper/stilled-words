@@ -1,0 +1,271 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    /* 知性と余白を感じさせる明朝体（セリフ体）を指定 */
+    font-family: "Shippori Mincho", "Noto Serif JP", "Yu Mincho", "MS PMincho", serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+}
+
+#aphorism-container {
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    padding: 2rem;
+}
+
+#content-area {
+    opacity: 0;
+    /* 0.5～1秒程度のフェード演出 */
+    transition: opacity 0.8s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+#content-area.visible {
+    opacity: 1;
+}
+
+#progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color: #777;
+    /* 背景に馴染む控えめなグレー */
+    width: 0%;
+    z-index: 1000;
+}
+
+#fortune-text {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+    letter-spacing: 0.25em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+#aphorism-text {
+    font-size: 1.8rem;
+    line-height: 2.2;
+    letter-spacing: 0.15em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+#lucky-item-text {
+    font-size: 1rem;
+    color: #777777;
+    letter-spacing: 0.1em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+@media (max-width: 600px) {
+    #aphorism-container {
+        width: 94%;
+        padding: 1.5rem 1rem;
+    }
+
+    #fortune-text {
+        font-size: 1.0rem;
+    }
+
+    #aphorism-text {
+        font-size: 1.3rem;
+        letter-spacing: 0.1em;
+        line-height: 2;
+    }
+
+    #lucky-item-text {
+        font-size: 0.9rem;
+    }
+
+    #content-area {
+        gap: 2rem;
+    }
+}
+
+/* スマホ横画面向けの調整 */
+@media (max-height: 500px) and (orientation: landscape) {
+    #aphorism-container {
+        padding: 1rem;
+    }
+
+    #content-area {
+        gap: 1rem;
+    }
+
+    #fortune-text {
+        font-size: 0.9rem;
+    }
+
+    #aphorism-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    #lucky-item-text {
+        font-size: 0.8rem;
+    }
+}
+
+/* ----- 儀式的なUI要素 ----- */
+.ui-element {
+    position: fixed;
+    font-family: inherit;
+    font-weight: 100;
+    /* 極限まで細く */
+    font-size: 1rem;
+    color: #FFFFFF;
+    /* 真っ白 */
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    cursor: pointer;
+    z-index: 900;
+    user-select: none;
+    letter-spacing: 0.3em;
+    /* 記号的な美しさ */
+}
+
+/* 画面内にカーソルがある時だけ、UIが「息を吹き返す」ように微かに表示 */
+body:hover .ui-element {
+    opacity: 0.2;
+}
+
+.ui-element:hover {
+    opacity: 0.6 !important;
+}
+
+.nav-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* 黄金比的マージン（約3.8% ~ 6.1%）で端から離す */
+.nav-left {
+    top: 50%;
+    left: 6.18vw;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    padding: 1rem;
+}
+
+.nav-right {
+    top: 50%;
+    right: 6.18vw;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    padding: 1rem;
+}
+
+.ui-element.disabled {
+    pointer-events: none;
+}
+
+body:hover .ui-element.disabled {
+    opacity: 0.05;
+}
+
+.pause-btn {
+    bottom: 6.18vh;
+    left: 6.18vw;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    padding: 1rem;
+}
+
+.share-wrapper {
+    bottom: 6.18vh;
+    right: 6.18vw;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    padding: 1rem;
+    text-align: right;
+}
+
+/* コピー通知等の静かなフィードバック */
+@keyframes breatheStored {
+    0% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+
+    30% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+
+    100% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+}
+
+.stored-feedback {
+    animation: breatheStored 1s ease-out forwards;
+}
+
+/* プログレスバー（時間進行）のアニメーションと状態 */
+#progress-bar {
+    width: 0%;
+    /* 初期幅0 */
+    /* JSでの width 変更ではなく animation で制御する方針に変更 */
+    transition: none !important;
+}
+
+#progress-bar.animate {
+    animation: fillBar 15s linear forwards;
+}
+
+@keyframes fillBar {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+#progress-bar.paused {
+    animation-play-state: paused;
+}
+
+#progress-bar.archive-mode {
+    /* 過去閲覧時のグレーアウト状態 */
+    background-color: #333;
+    animation-play-state: paused;
+}
+
+/* スマホ表示の特例（ホバーがないため、常に微かに見せる） */
+@media (max-width: 600px) {
+    .ui-element {
+        opacity: 0.15;
+    }
+
+    .nav-left,
+    .nav-right {
+        font-size: 1.2rem;
+        padding: 1.5rem 0.5rem;
+    }
+
+    .pause-btn,
+    .share-wrapper {
+        padding: 1rem 0.5rem;
+    }
+}
